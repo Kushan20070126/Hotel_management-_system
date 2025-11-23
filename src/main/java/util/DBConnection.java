@@ -33,7 +33,7 @@ public class DBConnection {
              return  instance;
          }
            
-         public synchronized Connection getConnection(String query){
+         public Connection getConnection(){
              return  con;
          }
         
