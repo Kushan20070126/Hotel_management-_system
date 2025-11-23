@@ -1,13 +1,17 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package dao.interfaces;
 
-/**
- *
- * @author KushanDev
- */
-public class IRoomDAO {
+
+import java.util.List;
+import model.Room;
+
+
+public interface IRoomDAO {
     
+    boolean addRoom(Room room);
+    boolean updateRoom(Room room);
+    boolean deleteRoom(int id);
+    Room getRoomByID(int id);
+    List<Room> getAllRooms();
+   
 }

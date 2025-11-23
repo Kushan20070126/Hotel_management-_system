@@ -50,7 +50,7 @@ public class Payment {
     public String getStatus(){
         return status;
     }
-    public Date getData(){
+    public Date getDate(){
         return date;
     }
     
