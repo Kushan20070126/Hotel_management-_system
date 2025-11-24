@@ -13,7 +13,7 @@ public class BookingDAO implements IBookingDAO{
 
     Connection con = DBConnection.getInstance().getConnection();
     @Override
-    public boolean addBooking(Booking booking) {
+    public boolean POST_BOOKING(Booking booking) {
         try {
             PreparedStatement st = con.prepareStatement("insert into bookings(guest_id, room_id, check_in, check_out, status, total_amount) values (?, ?, ?, ?,?, ?)");
             st.setInt(1, booking.getGuestID());
@@ -37,7 +37,7 @@ public class BookingDAO implements IBookingDAO{
     }
 
     @Override
-    public boolean updateBooking(Booking booking) {
+    public boolean PUT_BOOKING(Booking booking) {
         try {
     PreparedStatement st = con.prepareStatement("Update bookings set guest_id=?, room_id=?, check_in=?, check_out=?, status=?, total_amount=? where id=?");
             st.setInt(1, booking.getGuestID());
@@ -62,7 +62,7 @@ public class BookingDAO implements IBookingDAO{
     }
 
     @Override
-    public boolean deleteBooking(int id) {
+    public boolean DELETE_BOOKING(int id) {
         try {
             
             
@@ -82,7 +82,7 @@ public class BookingDAO implements IBookingDAO{
     }
 
     @Override
-    public Booking getBookingByID(int id) {
+    public Booking GET_BOOKING_ID(int id) {
         try {
             PreparedStatement st = con.prepareStatement("select * from bookings where id=?");
             st.setInt(1, id);
@@ -107,7 +107,7 @@ public class BookingDAO implements IBookingDAO{
     }
 
     @Override
-    public List<Booking> getAllBookings() {
+    public List<Booking> GET_BOOKINGES() {
          List<Booking> data = new ArrayList<>();
         try {
             Statement st = con.createStatement();
@@ -136,7 +136,7 @@ public class BookingDAO implements IBookingDAO{
     }
 
     @Override
-    public List<Booking> getBookingByGuest(int guestId) {
+    public List<Booking> GET_BOOKING_GUESTID(int guestId) {
         List<Booking> data = new ArrayList<>();
         try {
             PreparedStatement st = con.prepareStatement("select * from bookings where guest_id=?");
@@ -164,7 +164,7 @@ public class BookingDAO implements IBookingDAO{
     }
 
     @Override
-    public List<Booking> getBookingByRoom(int roomId) {
+    public List<Booking> GET_BOOKING_ROOMID(int roomId) {
          List<Booking> data = new ArrayList<>();
         try {
             PreparedStatement st = con.prepareStatement("select * from bookings where room_id=?");

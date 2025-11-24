@@ -6,11 +6,11 @@ import model.Payment;
 
 public interface IPaymentDAO {
     
-    boolean addPayment(Payment payment);
-    boolean upadatePayment(Payment payment);
-    boolean deletePayment(int id);
-    Payment getPaymentByID(int id);
-    List<Payment> getPaymentByBooking(int bookingid);
-    List<Payment> getAllPaymnet();
+    boolean POST_PAYMENT(Payment payment);
+    boolean PUT_PAYMENT(Payment payment);
+    boolean DELETE_PAYMENT(int id);
+    Payment GET_Payment_ID(int id);
+    List<Payment> GET_PAYMENT_BOOKINGID(int bookingid);
+    List<Payment> GET_PAYMENTS();
     
 }

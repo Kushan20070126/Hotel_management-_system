@@ -8,10 +8,10 @@ import model.Room;
 
 public interface IRoomDAO {
     
-    boolean addRoom(Room room);
-    boolean updateRoom(Room room);
-    boolean deleteRoom(int id);
-    Room getRoomByID(int id);
-    List<Room> getAllRooms();
+    boolean POST_ROOM(Room room);
+    boolean PUT_ROOM(Room room);
+    boolean DELETE_ROOM(int id);
+    Room GET_ROOM_ID(int id);
+    List<Room> GET_ROOMS();
    
 }

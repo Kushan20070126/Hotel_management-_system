@@ -6,11 +6,11 @@ import model.User;
 
 public interface IUserDAO {
     
-    boolean addUser(User user);
-    boolean updateUser(User user);
-    boolean deleteUser(int id);
-    User getUserByID(int id);
-    User Login(String username , String Password);
-    List<User> getAllUser();
+    boolean POST_USER(User user);
+    boolean PUT_USER(User user);
+    boolean DELETE_USER(int id);
+    User GET_USER_ID(int id);
+    User GET_LOGIN(String username , String Password);
+    List<User> GET_USERS();
     
 }

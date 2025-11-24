@@ -29,13 +29,13 @@ public class Room {
     }
     
     //Business  logic
-    public boolean isRoomAvailable(){
-        if(status.equals("Available")){
-            return true;
-        }else{
-            return false;
-        }  
-    }
+//    public boolean isRoomAvailable(){
+//        if(status.equals("Available")){
+//            return true;
+//        }else{
+//            return false;
+//        }  
+//    }
     public void markBooked(){
         status = "Booked";
     }

@@ -13,7 +13,7 @@ public class UserDAO  implements IUserDAO{
     Connection con = DBConnection.getInstance().getConnection();
 
     @Override
-    public boolean addUser(User user) {
+    public boolean POST_USER(User user) {
         try{
             PreparedStatement st = con.prepareStatement("INSERT INTO users(username, password, role) VALUES (?,?,?)");
             st.setString(1, user.getUserName());
@@ -35,7 +35,7 @@ public class UserDAO  implements IUserDAO{
     }
 
     @Override
-    public boolean updateUser(User user) {
+    public boolean PUT_USER(User user) {
         
         try {
        PreparedStatement st = con.prepareStatement("Update users set username=?,password=? ,role=?  where id=?");
@@ -58,7 +58,7 @@ public class UserDAO  implements IUserDAO{
     }
 
     @Override
-    public boolean deleteUser(int id) {
+    public boolean DELETE_USER(int id) {
         try{
              PreparedStatement st = con.prepareStatement("delete from users where id=?");
              st.setInt(1, id);
@@ -77,7 +77,7 @@ public class UserDAO  implements IUserDAO{
     }
 
     @Override
-    public User getUserByID(int id) {
+    public User GET_USER_ID(int id) {
         
         try{
         PreparedStatement st = con.prepareStatement("select * from users where id=?");
@@ -105,7 +105,7 @@ public class UserDAO  implements IUserDAO{
     }
 
     @Override
-    public List<User> getAllUser() {
+    public List<User> GET_USERS() {
         List<User> data = new ArrayList<>();
         
         try {
@@ -131,7 +131,7 @@ public class UserDAO  implements IUserDAO{
     }
 
     @Override
-    public User Login(String username, String Password) {
+    public User GET_LOGIN(String username, String Password) {
         
          User user = null;
         try {

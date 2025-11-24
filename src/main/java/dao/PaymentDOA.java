@@ -13,7 +13,7 @@ public class PaymentDOA implements IPaymentDAO{
     Connection con = DBConnection.getInstance().getConnection();
 
     @Override
-    public boolean addPayment(Payment payment) {
+    public boolean POST_PAYMENT(Payment payment) {
         
         try {
             PreparedStatement st = con.prepareStatement("insert into payments(booking_id, amount, method, date, status) values (?, ?, ?, ?,?)");
@@ -36,7 +36,7 @@ public class PaymentDOA implements IPaymentDAO{
     }
 
     @Override
-    public boolean upadatePayment(Payment payment) {
+    public boolean PUT_PAYMENT(Payment payment) {
         try {
        PreparedStatement st = con.prepareStatement("Update payments set booking_id=?,type=? ,price=? , status=? where id=?");
             st.setInt(1, payment.getBookID());
@@ -61,7 +61,7 @@ public class PaymentDOA implements IPaymentDAO{
     
 
     @Override
-    public boolean deletePayment(int id) {
+    public boolean DELETE_PAYMENT(int id) {
         
         try {
             PreparedStatement st = con.prepareStatement("delete from payments where id=?");
@@ -82,7 +82,7 @@ public class PaymentDOA implements IPaymentDAO{
     }
 
     @Override
-    public Payment getPaymentByID(int id) {
+    public Payment GET_Payment_ID(int id) {
         
         try {
            PreparedStatement st = con.prepareStatement("select * from payments where id=? ");
@@ -112,7 +112,7 @@ public class PaymentDOA implements IPaymentDAO{
     }
 
     @Override
-    public List<Payment> getAllPaymnet() {
+    public List<Payment> GET_PAYMENTS() {
         List<Payment> data = new ArrayList<>();
         try {
             
@@ -143,7 +143,7 @@ public class PaymentDOA implements IPaymentDAO{
     }
 
     @Override
-    public List<Payment> getPaymentByBooking(int bookingid) {
+    public List<Payment> GET_PAYMENT_BOOKINGID(int bookingid) {
          List<Payment> data = new ArrayList<>();
         try {
              PreparedStatement st = con.prepareStatement("SELECT * FROM payments WHERE booking_id=?");

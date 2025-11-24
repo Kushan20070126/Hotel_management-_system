@@ -12,7 +12,7 @@ public class GuestDAO implements IGuestDAO{
     Connection con = DBConnection.getInstance().getConnection();
 
     @Override
-    public boolean addGuest(Guest guest) {
+    public boolean POST_GUEST(Guest guest) {
         try{
             PreparedStatement st  = con.prepareStatement("Insert into guests(name,phone,email,id_number,address) values (?,?,?,?,?)");
             st.setString(1, guest.getName());
@@ -37,7 +37,7 @@ public class GuestDAO implements IGuestDAO{
     }
 
     @Override
-    public boolean updateGuest(Guest guest) {
+    public boolean PUT_GUEST(Guest guest) {
         
         try{
             PreparedStatement st  = con.prepareStatement("update guests set name=?,phone=?, email=?,id_number=?, address=? where id=?");
@@ -61,7 +61,7 @@ public class GuestDAO implements IGuestDAO{
     }
 
     @Override
-    public boolean deleteGuest(int id) {
+    public boolean DELETE_GUEST(int id) {
         try{
             PreparedStatement st = con.prepareStatement("delete from guests where id=?");
             st.setInt(1, id);
@@ -80,7 +80,7 @@ public class GuestDAO implements IGuestDAO{
     }
 
     @Override
-    public Guest getGuestByID(int id) {
+    public Guest GET_GUEST_ID(int id) {
         
         
         try {
@@ -104,7 +104,7 @@ public class GuestDAO implements IGuestDAO{
     }
 
     @Override
-    public List<Guest> getAllGuest() {
+    public List<Guest> GET_GUESTS() {
         
          List<Guest> data = new ArrayList<>();
 

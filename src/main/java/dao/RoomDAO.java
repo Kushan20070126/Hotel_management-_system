@@ -15,7 +15,7 @@ public class RoomDAO implements IRoomDAO{
     private Connection con = DBConnection.getInstance().getConnection();
 
     @Override
-    public boolean addRoom(Room room) {
+    public boolean POST_ROOM(Room room) {
         try{
             
             PreparedStatement st = con.prepareStatement("insert into rooms(number, type, price, status) values (?, ?, ?, ?)");
@@ -43,7 +43,7 @@ public class RoomDAO implements IRoomDAO{
     }
 
     @Override
-    public boolean updateRoom(Room room) {
+    public boolean PUT_ROOM(Room room) {
         try{
             
             PreparedStatement st = con.prepareStatement("Update rooms set number=?,type=? ,price=? , status=? where id=?");
@@ -69,7 +69,7 @@ public class RoomDAO implements IRoomDAO{
     }
 
     @Override
-    public boolean deleteRoom(int id) {
+    public boolean DELETE_ROOM(int id) {
         
         try{
             PreparedStatement st = con.prepareStatement("delete from rooms where id=?");
@@ -89,7 +89,7 @@ public class RoomDAO implements IRoomDAO{
     }
 
     @Override
-    public Room getRoomByID(int id) {
+    public Room GET_ROOM_ID(int id) {
         
         try{
             PreparedStatement st = con.prepareStatement("select * from rooms where id=? ");
@@ -123,7 +123,7 @@ public class RoomDAO implements IRoomDAO{
     }
 
     @Override
-    public List<Room> getAllRooms() {
+    public List<Room> GET_ROOMS() {
         
         List<Room> data = new ArrayList<>();
         
