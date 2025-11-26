@@ -26,10 +26,7 @@ public class Booking {
         this.totalAmmount = tot;
     }
     
-    public long getNight(){
-        long returnMS = checkOutDate.getTime() - checkInDate.getTime();
-        return (returnMS / (1000*60 * 60 * 24));
-    }
+    
     
     public boolean isCheckedIn(){
         if(status.equals("CheckedIn")){

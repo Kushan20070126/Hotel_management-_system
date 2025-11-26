@@ -156,6 +156,31 @@ public class UserDAO  implements IUserDAO{
         return user;
         
     }
+
+    @Override
+    public User GET_USER_USERNAME(String username) {
+        try {
+            PreparedStatement st = con.prepareStatement("SELECT * FROM users WHERE username = ?");
+            st.setString(1, username);
+            ResultSet rs = st.executeQuery();
+            
+            if(rs.next()){
+                User user = new User(
+                        rs.getInt("id"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("role")
+                
+                );
+            }
+        } catch (Exception e) {
+            
+            System.out.println("Loggin Error : " + e.getMessage());
+        }
+        return null;
+    }
+    
+     
  
     
 }
