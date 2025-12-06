@@ -12,5 +12,6 @@ public interface IUserDAO {
     User GET_USER_ID(int id);
     User GET_LOGIN(String username , String Password);
     List<User> GET_USERS();
+    public User GET_USER_USERNAME(String username);
     
 }

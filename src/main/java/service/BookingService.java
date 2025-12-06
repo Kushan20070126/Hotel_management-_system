@@ -21,7 +21,7 @@ public class BookingService {
     private IGuestDAO guestDAO = new GuestDAO();
     
     
-    public boolean CreateBooking(int gid , int rid, Date checkIn, Date checkout, String status, double total){
+    public boolean CreateBooking(int gid , int rid, Date checkIn, Date checkout){
         
         if(checkIn == null || checkout == null){
             System.err.println("Inavalid Date value");

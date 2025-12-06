@@ -1,6 +1,7 @@
 
 package dao.interfaces;
 
+import java.sql.Date;
 import java.util.List;
 import model.Payment;
 
@@ -12,5 +13,6 @@ public interface IPaymentDAO {
     Payment GET_Payment_ID(int id);
     List<Payment> GET_PAYMENT_BOOKINGID(int bookingid);
     List<Payment> GET_PAYMENTS();
+    double GET_TOTAL_INCOME(Date start, Date end);
     
 }

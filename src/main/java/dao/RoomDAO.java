@@ -8,18 +8,16 @@ import model.Room;
 import util.DBConnection;
 
 public class RoomDAO implements IRoomDAO {
-
-    // Removed the class-level 'private Connection con' to avoid thread-safety issues
-    // and rely on retrieving a connection inside each method using try-with-resources.
-
-    // --- Create (POST) ---
+    
+ private Connection con = DBConnection.getInstance().getConnection();
+   
     @Override
     public boolean POST_ROOM(Room room) {
-        final String SQL = "INSERT INTO rooms(number, type, price, status) VALUES (?, ?, ?, ?)";
-
-        // Use try-with-resources to automatically close Connection and PreparedStatement
-        try (Connection con = DBConnection.getInstance().getConnection();
-             PreparedStatement st = con.prepareStatement(SQL)) {
+        
+        try {
+                
+             PreparedStatement st = con.prepareStatement("INSERT INTO rooms(number, type, price, status) VALUES (?, ?, ?, ?)") ;
+                     
 
             st.setString(1, room.getNumber());
             st.setString(2, room.getType());
@@ -34,13 +32,13 @@ public class RoomDAO implements IRoomDAO {
         }
     }
 
-    // --- Update (PUT) ---
     @Override
     public boolean PUT_ROOM(Room room) {
-        final String SQL = "UPDATE rooms SET number=?, type=?, price=?, status=? WHERE id=?";
+       
 
-        try (Connection con = DBConnection.getInstance().getConnection();
-             PreparedStatement st = con.prepareStatement(SQL)) {
+        try {
+            
+             PreparedStatement st = con.prepareStatement("UPDATE rooms SET number=?, type=?, price=?, status=? WHERE id=?");
 
             st.setString(1, room.getNumber());
             st.setString(2, room.getType());
@@ -56,13 +54,13 @@ public class RoomDAO implements IRoomDAO {
         }
     }
 
-    // --- Delete (DELETE) ---
+  
     @Override
     public boolean DELETE_ROOM(int id) {
-        final String SQL = "DELETE FROM rooms WHERE id=?";
 
-        try (Connection con = DBConnection.getInstance().getConnection();
-             PreparedStatement st = con.prepareStatement(SQL)) {
+        try {
+            
+             PreparedStatement st = con.prepareStatement("DELETE FROM rooms WHERE id=?") ;
 
             st.setInt(1, id);
 
@@ -74,17 +72,15 @@ public class RoomDAO implements IRoomDAO {
         }
     }
 
-    // --- Read by ID (GET) ---
     @Override
     public Room GET_ROOM_ID(int id) {
-        final String SQL = "SELECT id, number, type, price, status FROM rooms WHERE id=?";
 
-        try (Connection con = DBConnection.getInstance().getConnection();
-             PreparedStatement st = con.prepareStatement(SQL)) {
+        try {
+            
+             PreparedStatement st = con.prepareStatement("SELECT id, number, type, price, status FROM rooms WHERE id=?");
 
             st.setInt(1, id);
 
-            // ResultSet is also managed by try-with-resources
             try (ResultSet rs = st.executeQuery()) {
                 if (rs.next()) {
                     return new Room(
@@ -100,18 +96,18 @@ public class RoomDAO implements IRoomDAO {
         } catch (SQLException e) {
             System.err.println("Database Error fetching Room by ID: " + e.getMessage());
         }
-        return null; // Return null if not found or on error
+        return null; 
     }
 
-    // --- Read All (GET) ---
+    
     @Override
     public List<Room> GET_ROOMS() {
+        
         List<Room> data = new ArrayList<>();
-        final String SQL = "SELECT id, number, type, price, status FROM rooms";
 
-        try (Connection con = DBConnection.getInstance().getConnection();
-             Statement st = con.createStatement(); // Statement is suitable here as no parameters are needed
-             ResultSet rs = st.executeQuery(SQL)) {
+        try {
+             Statement st = con.createStatement(); 
+             ResultSet rs = st.executeQuery("SELECT id, number, type, price, status FROM rooms");
 
             while (rs.next()) {
                 Room room = new Room(
@@ -131,4 +127,40 @@ public class RoomDAO implements IRoomDAO {
 
         return data;
     }
+    
+    @Override
+    public int GET_TOTAL_ROOMS() {
+        
+    String sql = "SELECT COUNT(*) FROM rooms";
+    
+    try (PreparedStatement ps = con.prepareStatement(sql);
+            
+         ResultSet rs = ps.executeQuery()) {
+        
+        if (rs.next()) return rs.getInt(1);
+        
+    } catch (Exception e) { System.out.println("Room Count Error : " + e.getMessage());
+    
+    }
+    return 0;
+}
+    
+    @Override
+    public int GET_OCCUPIED_ROOMS() {
+        
+    String sql = "SELECT COUNT(*) FROM bookings WHERE status IN ('Checked-in','Confirmed')";
+    
+    try (PreparedStatement ps = con.prepareStatement(sql);
+            
+         ResultSet rs = ps.executeQuery()) {
+        
+        if (rs.next()) return rs.getInt(1);
+        
+    } catch (Exception e) { System.out.println("Occupied Room Count Error : " + e); }
+    
+    return 0;
+}
+
+    
+
 }

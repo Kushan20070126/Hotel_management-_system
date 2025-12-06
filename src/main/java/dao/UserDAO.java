@@ -15,7 +15,11 @@ public class UserDAO  implements IUserDAO{
     @Override
     public boolean POST_USER(User user) {
         try{
+            
+            
             PreparedStatement st = con.prepareStatement("INSERT INTO users(username, password, role) VALUES (?,?,?)");
+            
+            
             st.setString(1, user.getUserName());
             st.setString(2, user.getPassword());
             st.setString(3, user.getRole());
@@ -106,6 +110,8 @@ public class UserDAO  implements IUserDAO{
 
     @Override
     public List<User> GET_USERS() {
+        
+        
         List<User> data = new ArrayList<>();
         
         try {
@@ -159,13 +165,14 @@ public class UserDAO  implements IUserDAO{
 
     @Override
     public User GET_USER_USERNAME(String username) {
+        User user = null;
         try {
             PreparedStatement st = con.prepareStatement("SELECT * FROM users WHERE username = ?");
             st.setString(1, username);
             ResultSet rs = st.executeQuery();
             
             if(rs.next()){
-                User user = new User(
+                 user = new User(
                         rs.getInt("id"),
                         rs.getString("username"),
                         rs.getString("password"),
@@ -176,8 +183,9 @@ public class UserDAO  implements IUserDAO{
         } catch (Exception e) {
             
             System.out.println("Loggin Error : " + e.getMessage());
+            return  null;
         }
-        return null;
+        return user;
     }
     
      

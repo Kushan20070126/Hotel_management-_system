@@ -18,7 +18,7 @@ public class RoomService {
         
         Room room = new Room(0, number, type, price, status);
         
-        return roomDAO.PUT_ROOM(room);
+        return roomDAO.POST_ROOM(room);
         
     } 
     
@@ -60,5 +60,7 @@ public class RoomService {
         return room.getStatus().equalsIgnoreCase("Available");
         
     }
+    
+   
     
 }

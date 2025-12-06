@@ -113,10 +113,5 @@ public class GuestService {
     public List<Guest> GetAllGuest(){
         
         return guestDAO.GET_GUESTS();
-    }
-    
-    
-    
-    
-    
+    }   
 }

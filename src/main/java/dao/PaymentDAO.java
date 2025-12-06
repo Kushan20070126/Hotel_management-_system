@@ -9,19 +9,18 @@ import util.DBConnection;
 
 public class PaymentDAO implements IPaymentDAO {
 
-    // Removed the class-level 'Connection con' for better thread safety and resource management.
+    private Connection con = DBConnection.getInstance().getConnection();
+    
 
     @Override
     public boolean POST_PAYMENT(Payment payment) {
-        // SQL statement for inserting a new payment record.
-        String sql = "INSERT INTO payments(booking_id, amount, method, date, status) VALUES (?, ?, ?, ?, ?)";
+        
 
-        // Use try-with-resources for automatic closure of Connection and PreparedStatement
-        try (Connection con = DBConnection.getInstance().getConnection();
-             PreparedStatement st = con.prepareStatement(sql)) {
+        try {
+             PreparedStatement st = con.prepareStatement("INSERT INTO payments(booking_id, amount, method, date, status) VALUES (?, ?, ?, ?, ?)");
 
             st.setInt(1, payment.getBookID());
-            st.setDouble(2, payment.getAmount()); // Corrected method name (assuming a fix in Payment model)
+            st.setDouble(2, payment.getAmmount()); 
             st.setString(3, payment.getMethod());
             st.setDate(4, payment.getDate());
             st.setString(5, payment.getStatus());
@@ -30,71 +29,81 @@ public class PaymentDAO implements IPaymentDAO {
             return rowsAffected > 0;
 
         } catch (SQLException e) {
+            
+            
             System.err.println("Something went wrong adding Payment: " + e.getMessage());
-            // Optionally, log the full stack trace for better debugging: e.printStackTrace();
+           
             return false;
         }
     }
 
-    ---
+    
 
     @Override
     public boolean PUT_PAYMENT(Payment payment) {
-        // Corrected SQL: The original SQL was mismatched with the parameter settings.
-        String sql = "UPDATE payments SET booking_id=?, amount=?, method=?, date=?, status=? WHERE id=?";
+       
 
-        try (Connection con = DBConnection.getInstance().getConnection();
-             PreparedStatement st = con.prepareStatement(sql)) {
+        try {
+            
+             PreparedStatement st = con.prepareStatement("UPDATE payments SET booking_id=?, amount=?, method=?, date=?, status=? WHERE id=?");
 
             st.setInt(1, payment.getBookID());
-            st.setDouble(2, payment.getAmount()); // Corrected method name
+            st.setDouble(2, payment.getAmmount());
             st.setString(3, payment.getMethod());
             st.setDate(4, payment.getDate());
             st.setString(5, payment.getStatus());
-            st.setInt(6, payment.getID()); // This should be the WHERE clause parameter
+            st.setInt(6, payment.getID()); 
 
             int rowsAffected = st.executeUpdate();
             return rowsAffected > 0;
+            
+            
 
         } catch (SQLException e) {
+            
+            
             System.err.println("Something went wrong updating Payment: " + e.getMessage());
+            
+            
             return false;
         }
     }
 
-    ---
+    
 
     @Override
     public boolean DELETE_PAYMENT(int id) {
-        String sql = "DELETE FROM payments WHERE id=?";
 
-        try (Connection con = DBConnection.getInstance().getConnection();
-             PreparedStatement st = con.prepareStatement(sql)) {
+        try {
+             PreparedStatement st = con.prepareStatement("DELETE FROM payments WHERE id=?");
 
             st.setInt(1, id);
 
             int rowsAffected = st.executeUpdate();
+            
             return rowsAffected > 0;
 
         } catch (SQLException e) {
+            
+            
             System.err.println("Something went wrong deleting Payment: " + e.getMessage());
+            
+            
             return false;
         }
     }
 
-    ---
+    
 
     @Override
     public Payment GET_Payment_ID(int id) {
-        String sql = "SELECT id, booking_id, amount, method, status, date FROM payments WHERE id=?";
 
-        try (Connection con = DBConnection.getInstance().getConnection();
-             PreparedStatement st = con.prepareStatement(sql)) {
+        try{
+             PreparedStatement st = con.prepareStatement("SELECT id, booking_id, amount, method, status, date FROM payments WHERE id=?");
 
             st.setInt(1, id);
 
-            // Use try-with-resources for ResultSet as well
-            try (ResultSet rs = st.executeQuery()) {
+            ResultSet rs = st.executeQuery();
                 if (rs.next()) {
                     return new Payment(
                         rs.getInt("id"),
@@ -107,23 +116,28 @@ public class PaymentDAO implements IPaymentDAO {
                 }
             }
 
-        } catch (SQLException e) {
+       catch (SQLException e) {
+            
+            
             System.err.println("Something went wrong fetching Payment by ID: " + e.getMessage());
+            
+            
         }
         return null;
     }
 
-    ---
+    
 
     @Override
     public List<Payment> GET_PAYMENTS() {
+        
         List<Payment> data = new ArrayList<>();
-        String sql = "SELECT id, booking_id, amount, method, status, date FROM payments";
 
-        // Using PreparedStatement even for simple queries is often safer, but Statement is okay here too.
-        try (Connection con = DBConnection.getInstance().getConnection();
+        
+
+        try {
              Statement st = con.createStatement();
-             ResultSet rs = st.executeQuery(sql)) { // ResultSet closed automatically
+             ResultSet rs = st.executeQuery("SELECT id, booking_id, amount, method, status, date FROM payments"); 
 
             while (rs.next()) {
                 Payment pay = new Payment(
@@ -136,28 +150,36 @@ public class PaymentDAO implements IPaymentDAO {
                 );
                 data.add(pay);
             }
+            
         } catch (SQLException e) {
+            
             System.err.println("Something went wrong fetching all Payments: " + e.getMessage());
-            return null; // Return null to indicate failure
+            
+            return null; 
+            
         }
         return data;
     }
 
-    ---
+    
 
     @Override
     public List<Payment> GET_PAYMENT_BOOKINGID(int bookingid) {
+        
+        
         List<Payment> data = new ArrayList<>();
-        String sql = "SELECT id, booking_id, amount, method, status, date FROM payments WHERE booking_id=?";
+        
 
-        try (Connection con = DBConnection.getInstance().getConnection();
-             PreparedStatement st = con.prepareStatement(sql)) {
+        try {
+             PreparedStatement st = con.prepareStatement("SELECT id, booking_id, amount, method, status, date FROM payments WHERE booking_id=?");
 
             st.setInt(1, bookingid);
 
-            // Use try-with-resources for ResultSet
-            try (ResultSet rs = st.executeQuery()) {
+           ResultSet rs = st.executeQuery();
+                
+                
                 while (rs.next()) {
+                    
                     Payment pay = new Payment(
                         rs.getInt("id"),
                         rs.getInt("booking_id"),
@@ -168,11 +190,31 @@ public class PaymentDAO implements IPaymentDAO {
                     );
                     data.add(pay);
                 }
+                
             }
-        } catch (SQLException e) {
+        catch (SQLException e) {
+            
             System.err.println("Something went wrong fetching Payments by Booking ID: " + e.getMessage());
             return null;
         }
         return data;
     }
+    
+     @Override
+    public double GET_TOTAL_INCOME(Date start, Date end) {
+    String sql = "SELECT SUM(amount) AS total FROM payments WHERE date BETWEEN ? AND ?";
+    try {
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setDate(1, start);
+        ps.setDate(2, end);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getDouble("total");
+        }
+    } catch (Exception e) {
+        System.out.println("Income Report Error: " + e);
+    }
+    return 0.0;
+}
+
 }

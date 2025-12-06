@@ -9,12 +9,12 @@ import util.DBConnection;
 
 public class GuestDAO implements IGuestDAO{
     
-    Connection con = DBConnection.getInstance().getConnection();
+   private Connection con = DBConnection.getInstance().getConnection();
 
     @Override
     public boolean POST_GUEST(Guest guest) {
         try{
-            PreparedStatement st  = con.prepareStatement("Insert into guests(name,phone,email,id_number,address) values (?,?,?,?,?)");
+            PreparedStatement st  = con.prepareStatement("Insert into guests(name,phone,email,nicORPass,address) values (?,?,?,?,?)");
             st.setString(1, guest.getName());
             st.setString(2, guest.getPhone());
             st.setString(3, guest.getEmail());
@@ -40,7 +40,7 @@ public class GuestDAO implements IGuestDAO{
     public boolean PUT_GUEST(Guest guest) {
         
         try{
-            PreparedStatement st  = con.prepareStatement("update guests set name=?,phone=?, email=?,id_number=?, address=? where id=?");
+            PreparedStatement st  = con.prepareStatement("update guests set name=?,phone=?, email=?,nicORPass=?, address=? where id=?");
             st.setString(1, guest.getName());
             st.setString(2, guest.getPhone());
             st.setString(3, guest.getEmail());
@@ -90,7 +90,7 @@ public class GuestDAO implements IGuestDAO{
             ResultSet rs = st.executeQuery();
             
             if(rs.next()){
-                Guest data = new Guest(rs.getInt("id"), rs.getString("name"), rs.getString("phone"), rs.getString("email"), rs.getString("id_number"), rs.getString("address"));
+                Guest data = new Guest(rs.getInt("id"), rs.getString("name"), rs.getString("phone"), rs.getString("email"), rs.getString("nicORPass"), rs.getString("address"));
                 return data;
                 
             }
@@ -113,7 +113,7 @@ public class GuestDAO implements IGuestDAO{
             ResultSet rs = st.executeQuery("select * from guests");
             
             while(rs.next()){
-                Guest guests = new Guest(rs.getInt("id"), rs.getString("name"), rs.getString("phone"), rs.getString("email"), rs.getString("id_number"), rs.getString("address"));
+                Guest guests = new Guest(rs.getInt("id"), rs.getString("name"), rs.getString("phone"), rs.getString("email"), rs.getString("nicORPass"), rs.getString("address"));
                 data.add(guests);
             }
             
@@ -124,6 +124,24 @@ public class GuestDAO implements IGuestDAO{
         }
         return  data;
     }   
+    
+    @Override
+    public int GET_GUEST_COUNT(Date start, Date end) {
+    String sql = "SELECT COUNT(*) AS total FROM guests "
+               + "JOIN bookings ON guests.id = bookings.guestId "
+               + "WHERE checkInDate BETWEEN ? AND ?";
+    try {
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setDate(1, start);
+        ps.setDate(2, end);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) return rs.getInt("total");
+    } catch (Exception e) {
+        System.out.println("Guest Count Error: " + e);
+    }
+    return 0;
+}
+
 }
     
     
