@@ -23,27 +23,28 @@ To set up the Hotel Management System on your local machine, follow these steps:
    cd Hotel_management-_system
    ```
 3. **Install dependencies:**  
-   Install required packages based on the language and package manager (e.g., for Python, use `pip`; for Node.js, use `npm`).
+   Install required packages based on the language and package manager (Java Maven).
    ```bash
-   pip install -r requirements.txt
-   # or
-   npm install
+   java : https://www.oracle.com/apac/java/technologies/downloads/
+   Netbeans : https://netbeans.apache.org/front/main/download/
    ```
 4. **Set up the database:**  
    Initialize the database using the provided schema or migration scripts.
    ```bash
-   # Example for SQLite
-   python setup_db.py
-   # or for MySQL/PostgreSQL, run the SQL scripts in the `database` directory
+   src/main/java/util/DBConnection.java
+
+   jdbc:mysql://localhost:3306/hotel_db?useSSL=false
+   user = root
+   pass = ""
+   
    ```
 5. **Configure environment variables:**  
    Update configuration files with your database credentials and environment-specific settings.
 
 6. **Run the application:**
    ```bash
-   python app.py
-   # or
-   npm start
+     mvn clean install
+   mvn exec:java -Dexec.mainClass="view.Login"
    ```
 
 ---
@@ -66,34 +67,11 @@ To set up the Hotel Management System on your local machine, follow these steps:
 
 The system requires the following:
 
-- Python 3.8+ or Node.js 14+ (depending on backend)
+- java 21 
 - SQLite, MySQL, or PostgreSQL for data persistence
-- Web browser for the user interface
-- Package manager (pip or npm)
+- Apache NetBeans
 - Optional: Docker for containerized deployment
 
----
-
-## Configuration
-
-Configuration is managed via environment variables and configuration files. Common settings include:
-
-- Database connection strings
-- Secret keys for authentication
-- Application port and host
-- Email server details (for notifications)
-
-Example `.env` configuration:
-```env
-DB_HOST=localhost
-DB_USER=hoteladmin
-DB_PASS=yourpassword
-DB_NAME=hotel_db
-SECRET_KEY=your-secret-key
-PORT=5000
-```
-
-Update these values before deploying or running the system in production.
 
 ---
 
