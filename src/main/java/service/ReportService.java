@@ -16,8 +16,8 @@ public class ReportService {
     private GuestDAO guestDAO = new GuestDAO();
     private RoomDAO roomDAO = new RoomDAO();
 
-    public double getTotalIncome(Date start, Date end) {
-        return paymentDAO.GET_TOTAL_INCOME(start, end);
+    public double getTotalIncome() {
+        return paymentDAO.GET_TOTAL_INCOME();
     }
 
     public int getBookingCount(Date start, Date end) {
@@ -41,7 +41,7 @@ public class ReportService {
     }
 
     public ReportData generateFullReport(Date start, Date end) {
-        double income = getTotalIncome(start, end);
+        double income = getTotalIncome();
         int bookingCount = getBookingCount(start, end);
         int guestCount = getGuestCount(start, end);
         Map<String, Integer> roomTypeStats = getRoomTypeReport();

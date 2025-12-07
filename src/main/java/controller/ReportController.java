@@ -10,9 +10,9 @@ public class ReportController {
     private ReportService reportService = new ReportService();
 
    
-    public double getTotalIncome(Date start, Date end) {
+    public double getTotalIncome(){
         
-        return reportService.getTotalIncome(start, end);
+        return reportService.getTotalIncome();
         
     }
 

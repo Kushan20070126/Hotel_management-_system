@@ -29,22 +29,35 @@ public class LoadingScreen extends javax.swing.JFrame {
             for(int i=0; i<=100; i++){
                 loadingBar.setValue(i);
                 lbl_status.setText("Loading " + i + "%...");
-                Thread.sleep(10); 
+                Thread.sleep(20); 
             }
 
-            
             SwingUtilities.invokeLater(() -> {
+                
                 Dashboard db = new Dashboard();
                 db.jLabel8.setText("Hello, " + user.getUserName());
-                db.setVisible(true);
-                this.dispose();   
+
+                
+                if(user.getRole().equalsIgnoreCase("Staff")){
+
+                    db.btn_rooms1.setVisible(false);
+                    db.btn_rooms.setVisible(false);
+                    db.menu.removeTabAt(0);
+                    db.setVisible(true);  
+
+                }else{
+                    db.setVisible(true);
+                }
+
+                this.dispose(); 
             });
 
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
     }).start();
 }
+
 
     /**
      * This method is called from within the constructor to initialize the form.

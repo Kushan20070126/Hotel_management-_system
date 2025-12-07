@@ -5,31 +5,46 @@
 package view;
 
 import chart.ModelPieChart;
-import chart.PieChart;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
+import static com.mysql.cj.conf.PropertyKey.logger;
 import controller.BookingController;
 import controller.GuestController;
 import controller.ReportController;
 import controller.RoomController;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.util.List;
 import java.util.Map;
-import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import model.Booking;
 import model.Guest;
+import model.ReportData;
 import model.Room;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.editor.ChartEditorFactory;
-import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
-
+//import com.itextpdf.text.Document;
+//import com.itextpdf.text.DocumentException;
+//import com.itextpdf.text.Paragraph;
+//import com.itextpdf.text.pdf.PdfWriter;
+import java.io.FileOutputStream;
+import java.io.FileNotFoundException;
+import java.text.SimpleDateFormat;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.util.Date;
+import javax.swing.JFileChooser;
 
 
 
@@ -47,7 +62,8 @@ public class Dashboard extends javax.swing.JFrame {
     public Dashboard() {
         
         initComponents();
-        
+     
+         panlerounder();
     btn_setting.setFocusPainted(false); 
     btn_bookings.setFocusPainted(false); 
     btn_guests.setFocusPainted(false); 
@@ -56,12 +72,25 @@ public class Dashboard extends javax.swing.JFrame {
     btn_save.setFocusPainted(false); 
     btn_save.setFocusPainted(false); 
     btn_delete.setFocusPainted(false);
+    txt_pay_checkin.setEditable(false);
+    txt_pay_checkout.setEditable(false);
+    txt_pay_guestID.setEditable(false);
+    txt_pay_roomID.setEditable(false);
+    txt_pay_tot.setEditable(false);
   
     loadTableDataRooms();
     usageOfRooms(); 
     Daily_Booking_Volume_chartLine();
     createLineChart_MonthlyIncomeTrend();
     Room_Occupancy_vs_Availability();
+    loadBooking_rooms();
+    loadGuestTable();
+    btn_createbooking.setEnabled(false);
+    
+    
+
+    
+   
         
     }
 
@@ -74,6 +103,7 @@ public class Dashboard extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jCheckBoxMenuItem1 = new javax.swing.JCheckBoxMenuItem();
         jPanel1 = new javax.swing.JPanel();
         btn_rooms = new javax.swing.JButton();
         btn_guests = new javax.swing.JButton();
@@ -87,23 +117,25 @@ public class Dashboard extends javax.swing.JFrame {
         jLabel14 = new javax.swing.JLabel();
         jTabbedPane2 = new javax.swing.JTabbedPane();
         jPanel12 = new javax.swing.JPanel();
-        pieChart1 = new chart.PieChart();
         jLabel1 = new javax.swing.JLabel();
         l_report_Iroom_avalability = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
+        pieChart1 = new chart.PieChart();
         jPanel13 = new javax.swing.JPanel();
         p_report = new javax.swing.JPanel();
         jPanel14 = new javax.swing.JPanel();
         l_report_Income = new javax.swing.JPanel();
+        pl_income = new javax.swing.JPanel();
+        jLabel20 = new javax.swing.JLabel();
+        lbl_totl_income = new javax.swing.JLabel();
         jPanel9 = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        jPanel5 = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
-        jPanel7 = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
-        jPanel8 = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
+        date_start = new com.toedter.calendar.JDateChooser();
+        date_end = new com.toedter.calendar.JDateChooser();
+        jLabel37 = new javax.swing.JLabel();
+        jLabel38 = new javax.swing.JLabel();
+        jLabel39 = new javax.swing.JLabel();
+        btn_generatepdf = new javax.swing.JButton();
+        lbl_repertData = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -122,6 +154,73 @@ public class Dashboard extends javax.swing.JFrame {
         cmb_status = new javax.swing.JComboBox<>();
         btn_delete = new javax.swing.JButton();
         lbl_refresh = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel19 = new javax.swing.JLabel();
+        jLabel21 = new javax.swing.JLabel();
+        jLabel22 = new javax.swing.JLabel();
+        jLabel23 = new javax.swing.JLabel();
+        txt_guestemail = new javax.swing.JTextField();
+        txt_guestphonenum = new javax.swing.JTextField();
+        txt_guestaddress = new javax.swing.JTextField();
+        txt_guestname = new javax.swing.JTextField();
+        btn_guestUpdate = new javax.swing.JButton();
+        btn_guestSave = new javax.swing.JButton();
+        btn_guestDelete = new javax.swing.JButton();
+        pl_guest = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tbl_guest = new javax.swing.JTable();
+        txt_Searchguest = new javax.swing.JTextField();
+        jLabel24 = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
+        txt_guestnic = new javax.swing.JTextField();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        txt_roomid = new javax.swing.JTextField();
+        txt_guestid = new javax.swing.JTextField();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        date_checkin = new com.toedter.calendar.JDateChooser();
+        jLabel18 = new javax.swing.JLabel();
+        date_checkout = new com.toedter.calendar.JDateChooser();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tbl_booking_rooms = new javax.swing.JTable();
+        lbl_isAvalable = new javax.swing.JLabel();
+        btn_createbooking = new javax.swing.JButton();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel26 = new javax.swing.JLabel();
+        jLabel27 = new javax.swing.JLabel();
+        txt_pay_guestID = new javax.swing.JTextField();
+        txt_pay_bookingID = new javax.swing.JTextField();
+        jLabel28 = new javax.swing.JLabel();
+        txt_pay_roomID = new javax.swing.JTextField();
+        jLabel29 = new javax.swing.JLabel();
+        txt_pay_checkout = new javax.swing.JTextField();
+        jLabel30 = new javax.swing.JLabel();
+        txt_pay_checkin = new javax.swing.JTextField();
+        jLabel31 = new javax.swing.JLabel();
+        txt_pay_tot = new javax.swing.JTextField();
+        jLabel32 = new javax.swing.JLabel();
+        btn_check_bookingID = new javax.swing.JButton();
+        jLabel33 = new javax.swing.JLabel();
+        txtDiscount = new javax.swing.JTextField();
+        jLabel34 = new javax.swing.JLabel();
+        txtTax = new javax.swing.JTextField();
+        txtFinal = new javax.swing.JTextField();
+        jLabel35 = new javax.swing.JLabel();
+        jLabel36 = new javax.swing.JLabel();
+        txtPaidAmount = new javax.swing.JTextField();
+        btn_check_bookingID1 = new javax.swing.JButton();
+        pla_tot_balance = new javax.swing.JPanel();
+        lblBalance = new javax.swing.JLabel();
+        lbl_checkout = new javax.swing.JLabel();
+        jPanel8 = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+
+        jCheckBoxMenuItem1.setSelected(true);
+        jCheckBoxMenuItem1.setText("jCheckBoxMenuItem1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -256,8 +355,9 @@ public class Dashboard extends javax.swing.JFrame {
                         .addComponent(jLabel4)
                         .addGap(365, 365, 365))
                     .addGroup(jPanel12Layout.createSequentialGroup()
-                        .addComponent(pieChart1, javax.swing.GroupLayout.PREFERRED_SIZE, 556, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addGap(16, 16, 16)
+                        .addComponent(pieChart1, javax.swing.GroupLayout.PREFERRED_SIZE, 469, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(89, 89, 89)
                         .addComponent(l_report_Iroom_avalability, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(101, Short.MAX_VALUE))))
         );
@@ -268,11 +368,11 @@ public class Dashboard extends javax.swing.JFrame {
                 .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pieChart1, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(l_report_Iroom_avalability, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(167, Short.MAX_VALUE))
+                    .addComponent(l_report_Iroom_avalability, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(pieChart1, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(179, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("Room", jPanel12);
@@ -315,11 +415,40 @@ public class Dashboard extends javax.swing.JFrame {
         l_report_Income.setLayout(l_report_IncomeLayout);
         l_report_IncomeLayout.setHorizontalGroup(
             l_report_IncomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1024, Short.MAX_VALUE)
+            .addGap(0, 1086, Short.MAX_VALUE)
         );
         l_report_IncomeLayout.setVerticalGroup(
             l_report_IncomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 498, Short.MAX_VALUE)
+            .addGap(0, 403, Short.MAX_VALUE)
+        );
+
+        jLabel20.setFont(new java.awt.Font("Liberation Sans", 1, 14)); // NOI18N
+        jLabel20.setText("Total Income : ");
+
+        lbl_totl_income.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
+        lbl_totl_income.setText("0");
+
+        javax.swing.GroupLayout pl_incomeLayout = new javax.swing.GroupLayout(pl_income);
+        pl_income.setLayout(pl_incomeLayout);
+        pl_incomeLayout.setHorizontalGroup(
+            pl_incomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pl_incomeLayout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(116, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pl_incomeLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lbl_totl_income)
+                .addGap(109, 109, 109))
+        );
+        pl_incomeLayout.setVerticalGroup(
+            pl_incomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pl_incomeLayout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addComponent(jLabel20)
+                .addGap(18, 18, 18)
+                .addComponent(lbl_totl_income)
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
@@ -327,145 +456,123 @@ public class Dashboard extends javax.swing.JFrame {
         jPanel14Layout.setHorizontalGroup(
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel14Layout.createSequentialGroup()
-                .addGap(58, 58, 58)
-                .addComponent(l_report_Income, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel14Layout.createSequentialGroup()
+                        .addGap(58, 58, 58)
+                        .addComponent(l_report_Income, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel14Layout.createSequentialGroup()
+                        .addGap(439, 439, 439)
+                        .addComponent(pl_income, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(52, Short.MAX_VALUE))
         );
         jPanel14Layout.setVerticalGroup(
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel14Layout.createSequentialGroup()
-                .addGap(62, 62, 62)
+                .addGap(21, 21, 21)
+                .addComponent(pl_income, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(36, 36, 36)
                 .addComponent(l_report_Income, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("Income chart", jPanel14);
+
+        jLabel37.setFont(new java.awt.Font("Liberation Sans", 1, 14)); // NOI18N
+        jLabel37.setText("Start Date : ");
+
+        jLabel38.setFont(new java.awt.Font("Liberation Sans", 1, 14)); // NOI18N
+        jLabel38.setText("End Date : ");
+
+        jLabel39.setFont(new java.awt.Font("Liberation Sans", 1, 24)); // NOI18N
+        jLabel39.setText("Full Report");
+
+        btn_generatepdf.setBackground(new java.awt.Color(51, 255, 51));
+        btn_generatepdf.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
+        btn_generatepdf.setForeground(new java.awt.Color(51, 0, 51));
+        btn_generatepdf.setText("Generate PDF");
+        btn_generatepdf.setActionCommand("btn_reports");
+        btn_generatepdf.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn_generatepdf.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_generatepdf.addActionListener(this::btn_generatepdfActionPerformed);
+
+        lbl_repertData.setFont(new java.awt.Font("Liberation Sans", 1, 24)); // NOI18N
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
         jPanel9Layout.setHorizontalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1206, Short.MAX_VALUE)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addContainerGap(377, Short.MAX_VALUE)
+                .addComponent(jLabel39)
+                .addGap(177, 177, 177)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel38)
+                    .addComponent(jLabel37))
+                .addGap(92, 92, 92)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(date_start, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(date_end, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(151, 151, 151))
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addComponent(btn_generatepdf, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(178, 178, 178))))
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addGap(181, 181, 181)
+                .addComponent(lbl_repertData, javax.swing.GroupLayout.PREFERRED_SIZE, 624, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 635, Short.MAX_VALUE)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(date_start, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel37))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(date_end, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel38)))
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addGap(13, 13, 13)
+                        .addComponent(jLabel39, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(44, 44, 44)
+                .addComponent(btn_generatepdf, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbl_repertData, javax.swing.GroupLayout.PREFERRED_SIZE, 393, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(56, Short.MAX_VALUE))
         );
 
-        jTabbedPane2.addTab("Room Occupancy and Availability", jPanel9);
+        jTabbedPane2.addTab("Generate Report", jPanel9);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGap(454, 454, 454)
-                .addComponent(jLabel14)
-                .addContainerGap(545, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1206, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36))
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGap(454, 454, 454)
+                        .addComponent(jLabel14))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1206, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(38, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addGap(19, 19, 19)
                 .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
                 .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 670, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(24, 24, 24))
+                .addGap(18, 18, 18))
         );
 
         menu.addTab("tab1", jPanel6);
-
-        jLabel3.setFont(new java.awt.Font("Liberation Sans", 1, 24)); // NOI18N
-        jLabel3.setText("Booking & Reservation");
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(425, 425, 425)
-                .addComponent(jLabel3)
-                .addContainerGap(561, Short.MAX_VALUE))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(36, 36, 36)
-                .addComponent(jLabel3)
-                .addContainerGap(731, Short.MAX_VALUE))
-        );
-
-        menu.addTab("tab3", jPanel3);
-
-        jLabel5.setFont(new java.awt.Font("Liberation Sans", 1, 24)); // NOI18N
-        jLabel5.setText("Booking & Reservation");
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(432, 432, 432)
-                .addComponent(jLabel5)
-                .addContainerGap(554, Short.MAX_VALUE))
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addComponent(jLabel5)
-                .addContainerGap(743, Short.MAX_VALUE))
-        );
-
-        menu.addTab("tab5", jPanel5);
-
-        jLabel6.setFont(new java.awt.Font("Liberation Sans", 1, 24)); // NOI18N
-        jLabel6.setText("Payment & Billing");
-
-        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
-        jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel7Layout.createSequentialGroup()
-                .addGap(452, 452, 452)
-                .addComponent(jLabel6)
-                .addContainerGap(593, Short.MAX_VALUE))
-        );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel7Layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(jLabel6)
-                .addContainerGap(745, Short.MAX_VALUE))
-        );
-
-        menu.addTab("tab6", jPanel7);
-
-        jLabel7.setFont(new java.awt.Font("Liberation Sans", 1, 24)); // NOI18N
-        jLabel7.setText("Tab 7");
-
-        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
-        jPanel8.setLayout(jPanel8Layout);
-        jPanel8Layout.setHorizontalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel8Layout.createSequentialGroup()
-                .addGap(441, 441, 441)
-                .addComponent(jLabel7)
-                .addContainerGap(746, Short.MAX_VALUE))
-        );
-        jPanel8Layout.setVerticalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel8Layout.createSequentialGroup()
-                .addGap(292, 292, 292)
-                .addComponent(jLabel7)
-                .addContainerGap(475, Short.MAX_VALUE))
-        );
-
-        menu.addTab("tab7", jPanel8);
 
         jLabel2.setFont(new java.awt.Font("Liberation Sans", 1, 24)); // NOI18N
         jLabel2.setText("Rooms");
@@ -660,6 +767,593 @@ public class Dashboard extends javax.swing.JFrame {
 
         menu.addTab("tab2", jPanel2);
 
+        jLabel5.setFont(new java.awt.Font("Liberation Sans", 1, 24)); // NOI18N
+        jLabel5.setText("Guest Registration & Management");
+
+        jLabel19.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
+        jLabel19.setText("Guest Name");
+
+        jLabel21.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
+        jLabel21.setText("Email");
+
+        jLabel22.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
+        jLabel22.setText("Phone Number");
+
+        jLabel23.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
+        jLabel23.setText("Address");
+
+        txt_guestemail.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
+
+        txt_guestphonenum.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
+
+        txt_guestaddress.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
+
+        txt_guestname.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
+
+        btn_guestUpdate.setBackground(new java.awt.Color(255, 255, 51));
+        btn_guestUpdate.setFont(new java.awt.Font("Liberation Sans", 1, 14)); // NOI18N
+        btn_guestUpdate.setForeground(new java.awt.Color(0, 0, 0));
+        btn_guestUpdate.setText("Update");
+        btn_guestUpdate.setBorder(null);
+        btn_guestUpdate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_guestUpdate.addActionListener(this::btn_guestUpdateActionPerformed);
+
+        btn_guestSave.setBackground(new java.awt.Color(102, 255, 0));
+        btn_guestSave.setFont(new java.awt.Font("Liberation Sans", 1, 14)); // NOI18N
+        btn_guestSave.setForeground(new java.awt.Color(0, 0, 0));
+        btn_guestSave.setText("Save");
+        btn_guestSave.setBorder(null);
+        btn_guestSave.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_guestSave.addActionListener(this::btn_guestSaveActionPerformed);
+
+        btn_guestDelete.setBackground(new java.awt.Color(255, 102, 102));
+        btn_guestDelete.setFont(new java.awt.Font("Liberation Sans", 1, 14)); // NOI18N
+        btn_guestDelete.setForeground(new java.awt.Color(0, 0, 0));
+        btn_guestDelete.setText("Delete");
+        btn_guestDelete.setBorder(null);
+        btn_guestDelete.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_guestDelete.addActionListener(this::btn_guestDeleteActionPerformed);
+
+        tbl_guest.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tbl_guest.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_guestMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(tbl_guest);
+
+        txt_Searchguest.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
+        txt_Searchguest.addActionListener(this::txt_SearchguestActionPerformed);
+        txt_Searchguest.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txt_SearchguestKeyReleased(evt);
+            }
+        });
+
+        jLabel24.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
+        jLabel24.setText("Search : ");
+
+        javax.swing.GroupLayout pl_guestLayout = new javax.swing.GroupLayout(pl_guest);
+        pl_guest.setLayout(pl_guestLayout);
+        pl_guestLayout.setHorizontalGroup(
+            pl_guestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pl_guestLayout.createSequentialGroup()
+                .addGroup(pl_guestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pl_guestLayout.createSequentialGroup()
+                        .addGap(62, 62, 62)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 532, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pl_guestLayout.createSequentialGroup()
+                        .addGap(54, 54, 54)
+                        .addComponent(jLabel24)
+                        .addGap(18, 18, 18)
+                        .addComponent(txt_Searchguest, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(65, Short.MAX_VALUE))
+        );
+        pl_guestLayout.setVerticalGroup(
+            pl_guestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pl_guestLayout.createSequentialGroup()
+                .addGap(53, 53, 53)
+                .addGroup(pl_guestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txt_Searchguest, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel24))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(41, 41, 41))
+        );
+
+        jLabel25.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
+        jLabel25.setText("NIC or Passport");
+
+        txt_guestnic.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(376, 376, 376)
+                .addComponent(jLabel5)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(62, 62, 62)
+                        .addComponent(btn_guestSave, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(40, 40, 40)
+                        .addComponent(btn_guestUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(32, 32, 32)
+                        .addComponent(btn_guestDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(31, 31, 31)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addComponent(jLabel21)
+                                .addGap(40, 40, 40))
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addComponent(jLabel22)
+                                .addGap(18, 18, 18))
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addComponent(jLabel19)
+                                .addGap(28, 28, 28))
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addComponent(jLabel23)
+                                .addGap(29, 29, 29)))
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txt_guestphonenum, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txt_guestaddress, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txt_guestemail, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txt_guestname, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addComponent(jLabel25)
+                        .addGap(18, 18, 18)
+                        .addComponent(txt_guestnic, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(31, 31, 31)
+                .addComponent(pl_guest, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 46, Short.MAX_VALUE))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(41, 41, 41)
+                .addComponent(jLabel5)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(81, 81, 81)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txt_guestname, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(46, 46, 46)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel21)
+                            .addComponent(txt_guestemail, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(31, 31, 31)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txt_guestphonenum, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel22))
+                        .addGap(34, 34, 34)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txt_guestaddress, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel23))
+                        .addGap(34, 34, 34)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txt_guestnic, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel25))
+                        .addGap(45, 45, 45)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addGap(33, 33, 33)
+                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(btn_guestSave, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btn_guestUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btn_guestDelete, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(50, 50, 50)
+                        .addComponent(pl_guest, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(140, Short.MAX_VALUE))
+        );
+
+        menu.addTab("tab5", jPanel5);
+
+        jLabel3.setFont(new java.awt.Font("Liberation Sans", 1, 24)); // NOI18N
+        jLabel3.setText("Booking & Reservation");
+
+        txt_roomid.addActionListener(this::txt_roomidActionPerformed);
+        txt_roomid.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txt_roomidKeyReleased(evt);
+            }
+        });
+
+        jLabel15.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
+        jLabel15.setText("Room ID : ");
+
+        jLabel16.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
+        jLabel16.setText("Guest ID : ");
+
+        jLabel17.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
+        jLabel17.setText("CheckIn Date : ");
+
+        jLabel18.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
+        jLabel18.setText("CheckOut Date : ");
+
+        tbl_booking_rooms.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(tbl_booking_rooms);
+
+        btn_createbooking.setBackground(new java.awt.Color(255, 255, 0));
+        btn_createbooking.setFont(new java.awt.Font("Liberation Sans", 1, 14)); // NOI18N
+        btn_createbooking.setForeground(new java.awt.Color(0, 0, 0));
+        btn_createbooking.setText("Create Booking");
+        btn_createbooking.setBorder(null);
+        btn_createbooking.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_createbooking.addActionListener(this::btn_createbookingActionPerformed);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(56, 56, 56)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel16)
+                                    .addComponent(jLabel15))
+                                .addGap(116, 116, 116)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(txt_guestid, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(date_checkin, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(date_checkout, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(txt_roomid, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lbl_isAvalable, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(28, 28, 28)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jLabel17, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel18, javax.swing.GroupLayout.Alignment.LEADING))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 165, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                .addComponent(btn_createbooking, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(255, 255, 255))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(186, 186, 186)))))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 397, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap(27, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 762, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(jLabel3)
+                .addGap(243, 243, 243)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txt_roomid, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel15))
+                .addGap(7, 7, 7)
+                .addComponent(lbl_isAvalable, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel18)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txt_guestid, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel16))
+                        .addGap(33, 33, 33)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(date_checkin, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel17))
+                        .addGap(26, 26, 26)
+                        .addComponent(date_checkout, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(34, 34, 34)
+                .addComponent(btn_createbooking, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        menu.addTab("tab3", jPanel3);
+
+        jLabel6.setFont(new java.awt.Font("Liberation Sans", 1, 24)); // NOI18N
+        jLabel6.setText("Payment & Invoice Processing");
+
+        jLabel26.setFont(new java.awt.Font("Liberation Sans", 1, 24)); // NOI18N
+        jLabel26.setText("Billing Information  : ");
+
+        jLabel27.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
+        jLabel27.setText("Booking ID : ");
+
+        txt_pay_guestID.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
+
+        txt_pay_bookingID.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
+        txt_pay_bookingID.addActionListener(this::txt_pay_bookingIDActionPerformed);
+        txt_pay_bookingID.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txt_pay_bookingIDKeyReleased(evt);
+            }
+        });
+
+        jLabel28.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
+        jLabel28.setText("Guest ID : ");
+
+        txt_pay_roomID.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
+
+        jLabel29.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
+        jLabel29.setText("Room ID : ");
+
+        txt_pay_checkout.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
+
+        jLabel30.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
+        jLabel30.setText("Check Out : ");
+
+        txt_pay_checkin.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
+
+        jLabel31.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
+        jLabel31.setText("Check In : ");
+
+        txt_pay_tot.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
+
+        jLabel32.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
+        jLabel32.setText("Total Amount : ");
+
+        btn_check_bookingID.setBackground(new java.awt.Color(102, 102, 255));
+        btn_check_bookingID.setFont(new java.awt.Font("Liberation Sans", 1, 14)); // NOI18N
+        btn_check_bookingID.setText("Check");
+        btn_check_bookingID.setBorderPainted(false);
+        btn_check_bookingID.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_check_bookingID.addActionListener(this::btn_check_bookingIDActionPerformed);
+
+        jLabel33.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
+        jLabel33.setText("Discount : ");
+
+        txtDiscount.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
+
+        jLabel34.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
+        jLabel34.setText("Tax:");
+
+        txtTax.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
+
+        txtFinal.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
+
+        jLabel35.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
+        jLabel35.setText("Final Total : ");
+
+        jLabel36.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
+        jLabel36.setText("Enter Paid Amount : ");
+
+        txtPaidAmount.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
+        txtPaidAmount.setCaretColor(new java.awt.Color(0, 255, 0));
+
+        btn_check_bookingID1.setBackground(new java.awt.Color(0, 255, 0));
+        btn_check_bookingID1.setFont(new java.awt.Font("Liberation Sans", 1, 14)); // NOI18N
+        btn_check_bookingID1.setForeground(new java.awt.Color(51, 51, 51));
+        btn_check_bookingID1.setText("Enter");
+        btn_check_bookingID1.setBorderPainted(false);
+        btn_check_bookingID1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_check_bookingID1.addActionListener(this::btn_check_bookingID1ActionPerformed);
+
+        lblBalance.setFont(new java.awt.Font("Liberation Sans", 1, 24)); // NOI18N
+        lblBalance.setText("0");
+
+        javax.swing.GroupLayout pla_tot_balanceLayout = new javax.swing.GroupLayout(pla_tot_balance);
+        pla_tot_balance.setLayout(pla_tot_balanceLayout);
+        pla_tot_balanceLayout.setHorizontalGroup(
+            pla_tot_balanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pla_tot_balanceLayout.createSequentialGroup()
+                .addGap(156, 156, 156)
+                .addComponent(lblBalance)
+                .addContainerGap(182, Short.MAX_VALUE))
+        );
+        pla_tot_balanceLayout.setVerticalGroup(
+            pla_tot_balanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pla_tot_balanceLayout.createSequentialGroup()
+                .addContainerGap(43, Short.MAX_VALUE)
+                .addComponent(lblBalance)
+                .addGap(41, 41, 41))
+        );
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGap(111, 111, 111)
+                        .addComponent(jLabel32)
+                        .addGap(18, 18, 18)
+                        .addComponent(txt_pay_tot, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGap(281, 281, 281)
+                        .addComponent(btn_check_bookingID, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(69, 69, 69)
+                        .addComponent(lbl_checkout)))
+                .addGap(5, 5, 5)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGap(55, 55, 55)
+                        .addComponent(jLabel36)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtPaidAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                                        .addComponent(jLabel35)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(txtFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                                        .addComponent(jLabel34)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(txtTax, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                                        .addComponent(jLabel33)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(txtDiscount, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(233, 233, 233))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                                .addComponent(btn_check_bookingID1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(157, 157, 157))))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(pla_tot_balance, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(395, 395, 395))
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGap(121, 121, 121)
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel7Layout.createSequentialGroup()
+                                .addComponent(jLabel27)
+                                .addGap(21, 21, 21)
+                                .addComponent(txt_pay_bookingID, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txt_pay_guestID, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txt_pay_roomID, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGap(125, 125, 125)
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel29)
+                            .addComponent(jLabel28)))
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGap(417, 417, 417)
+                        .addComponent(jLabel6))
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGap(61, 61, 61)
+                        .addComponent(jLabel31)
+                        .addGap(39, 39, 39)
+                        .addComponent(txt_pay_checkin, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel30)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txt_pay_checkout, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGap(43, 43, 43)
+                        .addComponent(jLabel26)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(jLabel6)
+                .addGap(90, 90, 90)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtDiscount, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel33))
+                        .addGap(33, 33, 33)
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtTax, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel34))
+                        .addGap(50, 50, 50)
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel35))
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel7Layout.createSequentialGroup()
+                                .addGap(74, 74, 74)
+                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(txt_pay_tot, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel32))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(txt_pay_checkout, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel30)
+                                    .addComponent(txt_pay_checkin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel31)))
+                            .addGroup(jPanel7Layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(txtPaidAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel36))
+                                .addGap(18, 18, 18)
+                                .addComponent(btn_check_bookingID1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addComponent(jLabel26)
+                        .addGap(45, 45, 45)
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txt_pay_bookingID, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel27))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel7Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(btn_check_bookingID, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(txt_pay_roomID, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel29))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(txt_pay_guestID, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel28))
+                                .addGap(121, 121, 121))
+                            .addGroup(jPanel7Layout.createSequentialGroup()
+                                .addComponent(lbl_checkout)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
+                .addGap(67, 67, 67)
+                .addComponent(pla_tot_balance, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(85, 85, 85))
+        );
+
+        menu.addTab("tab6", jPanel7);
+
+        jLabel7.setFont(new java.awt.Font("Liberation Sans", 1, 24)); // NOI18N
+        jLabel7.setText("Settings");
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addGap(74, 74, 74)
+                .addComponent(jLabel7)
+                .addContainerGap(1081, Short.MAX_VALUE))
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addGap(120, 120, 120)
+                .addComponent(jLabel7)
+                .addContainerGap(647, Short.MAX_VALUE))
+        );
+
+        menu.addTab("tab7", jPanel8);
+
         getContentPane().add(menu, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, -40, 1250, 830));
 
         pack();
@@ -672,7 +1366,7 @@ public class Dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_settingActionPerformed
 
     private void btn_roomsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_roomsActionPerformed
-         menu.setSelectedIndex(6);
+         menu.setSelectedIndex(1);
         
     }//GEN-LAST:event_btn_roomsActionPerformed
 
@@ -705,6 +1399,17 @@ public class Dashboard extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_cmb_statusActionPerformed
 
+    private void loader(){
+    panlerounder();
+//    loadTableDataRooms();
+//    usageOfRooms(); 
+    Daily_Booking_Volume_chartLine();
+    createLineChart_MonthlyIncomeTrend();
+    Room_Occupancy_vs_Availability();
+//    loadBooking_rooms();
+    loadGuestTable();
+
+    }
    private void Daily_Booking_Volume_chartLine() {
 
     ReportController booking = new ReportController();
@@ -717,6 +1422,8 @@ public class Dashboard extends javax.swing.JFrame {
         int count = entry.getValue();         
         dataset.addValue(count, "Bookings", date);
     }
+    
+   
 
     JFreeChart chart = ChartFactory.createBarChart(
         "Daily Booking Volume",     
@@ -738,6 +1445,34 @@ public class Dashboard extends javax.swing.JFrame {
     p_report.revalidate();
     p_report.repaint();
 }
+    private void panlerounder() {
+
+    ReportController rc = new ReportController();
+
+
+//    if (date_start.getDate() == null || date_end.getDate() == null) {
+//        lbl_totl_income.setForeground(Color.RED);
+//        return;
+//    }
+
+
+//    java.sql.Date sDate = new java.sql.Date(date_start.getDate().getTime());
+//    java.sql.Date eDate = new java.sql.Date(date_end.getDate().getTime());
+
+    pl_income.setBackground(Color.WHITE);
+    pl_income.setBorder(new RoundedBorder(20)); 
+    pl_guest.setBackground(Color.WHITE);
+    pl_guest.setBorder(new RoundedBorder(20));
+    pla_tot_balance.setBorder(new RoundedBorder(20));
+    
+  
+    double income = rc.getTotalIncome();
+
+
+    lbl_totl_income.setText("Rs. " + String.format("%,.2f", income));
+    lbl_totl_income.setForeground(new Color(0,128,0)); 
+}
+
 
    private void createLineChart_MonthlyIncomeTrend() {
 
@@ -826,13 +1561,145 @@ public class Dashboard extends javax.swing.JFrame {
         }catch(NumberFormatException ee){
             
             JOptionPane.showMessageDialog(this, "Invalid price! Only numbers allowed. Error : "+ ee.getMessage());
+            
         }catch(Exception e){
             
             JOptionPane.showMessageDialog(this, "Somthing went wrong Error : "+ e.getMessage());
+            
+        }finally{
+            
+            txt_number.setText("");
+            txt_type.setText("");
+            txt_price.setText("");
+            cmb_status.setSelectedIndex(0);   
+            
+    loader();
+            
         }
+        
+        
       
+        
     }//GEN-LAST:event_btn_saveActionPerformed
+    private void loadBooking(){
 
+    BookingController bc = new BookingController();
+    
+    if(txt_pay_bookingID.getText().isEmpty()){
+        JOptionPane.showMessageDialog(this,"Please enter Booking ID");
+        return;
+    }
+    
+    int id = Integer.parseInt(txt_pay_bookingID.getText());
+    Booking b = bc.getbooking(id);
+
+    if(b == null){
+        JOptionPane.showMessageDialog(this,"Booking Not Found");
+        return;
+    }
+
+  
+    txt_pay_guestID.setText(String.valueOf(b.getGuestID()));
+    txt_pay_roomID.setText(String.valueOf(b.getRoomID()));
+    txt_pay_checkin.setText(String.valueOf(b.getCheckInDate()));
+    txt_pay_checkout.setText(String.valueOf(b.getCheckOutDate()));
+    txt_pay_tot.setText(String.valueOf(b.getToatalAmmount())); 
+
+    
+    if(b.getStatus().equalsIgnoreCase("Checked-in")){
+        lbl_checkout.setText("✔ Currently Checked-In");
+        lbl_checkout.setForeground(Color.GREEN);
+    } else if(b.getStatus().equalsIgnoreCase("Checked-out")){
+        lbl_checkout.setText("✔ Guest Checked-Out");
+        lbl_checkout.setForeground(Color.BLUE);
+    } else{
+        lbl_checkout.setText("⛔ Pending / Not Active");
+        lbl_checkout.setForeground(Color.RED);
+    }
+
+    calculateFinal(); 
+    bc.checkout(id);
+    }
+
+    
+    private void calculateFinal(){
+        try{
+            double total = Double.parseDouble(txt_pay_tot.getText());
+            double dis = Double.parseDouble(txtDiscount.getText());
+            double tax = Double.parseDouble(txtTax.getText());
+
+            double payable = total - (total * dis/100) + (total * tax/100);
+            txtFinal.setText(String.format("%.2f", payable));
+            
+        }catch(Exception ignored){}
+    }
+
+    private void processPayment(){
+        double paid = Double.parseDouble(txtPaidAmount.getText());
+        double payable = Double.parseDouble(txtFinal.getText());
+
+        double balance = paid - payable;
+        lblBalance.setText("Balance: " + balance);
+        
+       
+
+        JOptionPane.showMessageDialog(this, "Payment Processed Successfully!");
+    }
+
+
+    
+    
+    private void loadGuestTable() {
+
+    GuestController gc = new GuestController();
+    List<Guest> list = gc.getallguest();  
+
+    DefaultTableModel model = new DefaultTableModel(
+        new String[]{"ID", "Name", "Phone", "Email", "NIC", "Address"}, 0
+    );
+
+    for (Guest g : list) {
+        model.addRow(new Object[]{
+            g.getID(),
+            g.getName(),
+            g.getPhone(),
+            g.getEmail(),
+            g.getNICORPassport(),
+            g.getAddress()
+        });
+    }
+
+    tbl_guest.setModel(model);
+}
+
+ 
+    private void loadTableDataRooms(){
+        
+        
+        
+        RoomController rc = new RoomController();
+    List<Room> dataList = rc.getallrooms();
+    
+    String[] columnNames = {"ID", "Number", "Type", "Price", "Status"};
+    DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+
+    for (Room obj : dataList) {
+       
+        model.addRow(new Object[]{
+            obj.getID(),
+            obj.getNumber(),
+            obj.getType(),
+            obj.getPrice(),
+            obj.getStatus()
+                
+       
+        } );
+    }
+
+    tbl_rooms.setModel(model);
+    usageOfRooms();
+    }
+    
     private void tbl_roomsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_roomsMouseClicked
         
         DefaultTableModel model = (DefaultTableModel)tbl_rooms.getModel();
@@ -876,7 +1743,14 @@ public class Dashboard extends javax.swing.JFrame {
        }catch(Exception e){
             
             JOptionPane.showMessageDialog(this, "Somthing went wrong Error : "+ e.getMessage());
-        }
+        }finally{
+            txt_number.setText("");
+            txt_type.setText("");
+            txt_price.setText("");
+            cmb_status.setSelectedIndex(0);
+            
+loader();
+       }
     }//GEN-LAST:event_btn_updateActionPerformed
 
     private void btn_deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_deleteActionPerformed
@@ -889,14 +1763,15 @@ public class Dashboard extends javax.swing.JFrame {
                 }else{
                     JOptionPane.showMessageDialog(this, "Room Delete  error  or Not Found !!");
                 }
-                
-                loadTableDataRooms();
-                  usageOfRooms(); 
+                txt_search.setText("");
+loader();
 
     }//GEN-LAST:event_btn_deleteActionPerformed
 
     private void txt_searchPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_txt_searchPropertyChange
-      
+     
+       
+    
 
     }//GEN-LAST:event_txt_searchPropertyChange
 
@@ -905,7 +1780,7 @@ public class Dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_lbl_refreshMousePressed
 
     private void lbl_refreshMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_refreshMouseClicked
-      loadTableDataRooms();
+      //loadTableDataRooms();
       
     }//GEN-LAST:event_lbl_refreshMouseClicked
 
@@ -918,15 +1793,380 @@ public class Dashboard extends javax.swing.JFrame {
         
     }//GEN-LAST:event_txt_searchKeyReleased
 
+    private void txt_roomidActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_roomidActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_roomidActionPerformed
+
+    private void txt_roomidKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_roomidKeyReleased
     
-    private void loadTableDataRooms(){
+                                              
+     
+        RoomController rc =  new RoomController();
+        boolean isavalable = rc.isroomAvlabale(Integer.parseInt(txt_roomid.getText()));
+        if(isavalable){
+            
+            lbl_isAvalable.setForeground(Color.GREEN);
+            lbl_isAvalable.setText(" ✔ Room  Avlabale");
+            btn_createbooking.setEnabled(true);
+            
+        }else{
+            lbl_isAvalable.setForeground(Color.RED);
+            lbl_isAvalable.setText(" X Room Unavlabale ");
+        }
+
+    
+        
+    }//GEN-LAST:event_txt_roomidKeyReleased
+
+
+
+
+public void generateFullReportPdf() {
+    
+    JFileChooser jFileChooser = new JFileChooser();
+    jFileChooser.setDialogTitle("Save PDF Report");
+    jFileChooser.setFileSelectionMode(jFileChooser.FILES_ONLY);
+    
+    
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+    String defaultFileName = "Report_" + sdf.format(new Date()) + ".pdf";
+    jFileChooser.setSelectedFile(new java.io.File(defaultFileName));
+    
+    int result = jFileChooser.showSaveDialog(null);
+    
+    String outputPath = "";
+    if (result == jFileChooser.APPROVE_OPTION) {
+        java.io.File selectedFile = jFileChooser.getSelectedFile();
+        
+        
+        if (!selectedFile.getName().toLowerCase().endsWith(".pdf")) {
+            selectedFile = new java.io.File(selectedFile.getAbsolutePath() + ".pdf");
+        }
+        
+        outputPath = selectedFile.getAbsolutePath();
+    } else {
+        JOptionPane.showMessageDialog(this, "User cancelled the operation!");
+        return;
+    }
+    
+    
+    java.sql.Date start = new java.sql.Date(date_start.getDate().getTime());
+    java.sql.Date end = new java.sql.Date(date_end.getDate().getTime());
+    
+      if (start == null || end == null) {
+        JOptionPane.showMessageDialog(this, "Please select valid dates!");
+        return;
+    }
+    
+    if (start.after(end)) {
+        JOptionPane.showMessageDialog(this, "Start date must be before end date!");
+        return;
+    }
+    
+    ReportController rs = new ReportController();
+    ReportData reportData = rs.generateFullReport(start, end);
+    
+    Document document = new Document();
+    FileOutputStream fos = null;
+    
+    try {
+        fos = new FileOutputStream(outputPath);
+        PdfWriter.getInstance(document, fos);
+        document.open();
+
+        
+        SimpleDateFormat displayFormat = new SimpleDateFormat("yyyy-MM-dd");
+        
+        
+        document.add(new Paragraph("REPORT TITLE: Full Report"));
+        document.add(new Paragraph(" ")); 
+        document.add(new Paragraph("Report Period: " + displayFormat.format(start) + " to " + displayFormat.format(end)));
+        document.add(new Paragraph("Generated On: " + displayFormat.format(new Date())));
+        document.add(new Paragraph(" "));
+        document.add(new Paragraph("=============================================================================="));
+        document.add(new Paragraph(" "));
+        document.add(new Paragraph("Booking Count: " + reportData.getBookingCount()));
+        document.add(new Paragraph("Guest Count: " + reportData.getGuestCount()));
+        document.add(new Paragraph("Room Type Stats: " + reportData.getRoomTypeStats().toString()));
+        document.add(new Paragraph(" "));
+        document.add(new Paragraph("-------------------------------------------------------------------------------"));
+        document.add(new Paragraph(" "));
+        document.add(new Paragraph("Income: RS." + String.format("%.2f", reportData.getIncome())));
+        document.add(new Paragraph(" "));
+        document.add(new Paragraph("*******************************************************************************"));
+        
+        document.close();
+        
+       
+        JOptionPane.showMessageDialog(this, 
+            "PDF generated successfully!\n" +
+            "Location: " + outputPath,
+            "Success",
+            JOptionPane.INFORMATION_MESSAGE);
+        
+        
+        String htmlText = "<html><div style='font-family: monospace;'>" +
+            "<b>Report Title:</b> Full Report<br>" +
+            "<b>Report Period:</b> " + displayFormat.format(start) + " to " + displayFormat.format(end) + "<br>" +
+            "<b>Generated On:</b> " + displayFormat.format(new Date()) + "<br>" +
+            "<hr>" +
+            "<b>Booking Count:</b> " + reportData.getBookingCount() + "<br>" +
+            "<b>Guest Count:</b> " + reportData.getGuestCount() + "<br>" +
+            "<b>Room Type Stats:</b> " + reportData.getRoomTypeStats().toString() + "<br>" +
+            "<b>Income:</b> Rs." + String.format("%.2f", reportData.getIncome()) + "<br>" +
+            "</div></html>";
+        
+        lbl_repertData.setText(htmlText);
+        
+    } catch (DocumentException | java.io.FileNotFoundException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, 
+            "Error generating PDF: " + e.getMessage(),
+            "Error",
+            JOptionPane.ERROR_MESSAGE);
+    } finally {
+        if (document != null && document.isOpen()) {
+            document.close();
+        }
+        if (fos != null) {
+            try {
+                fos.close();
+            } catch (java.io.IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+    
+    private void btn_createbookingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_createbookingActionPerformed
+        
+       try {
+    BookingController bc = new BookingController();
+    RoomController rc = new RoomController();
+    GuestController gc = new GuestController();
+
+    java.sql.Date checkinDate  = new java.sql.Date(date_checkin.getDate().getTime());
+    java.sql.Date checkoutDate = new java.sql.Date(date_checkout.getDate().getTime());
+
+    if(checkoutDate.before(checkinDate)){
+        JOptionPane.showMessageDialog(this, "Check-out cannot be earlier than Check-in");
+        return;
+    }
+
+    int roomId  = Integer.parseInt(txt_roomid.getText().trim());
+    int guestId = Integer.parseInt(txt_guestid.getText().trim());
+
+    
+    if(!rc.isroomAvlabale(roomId)){
+        JOptionPane.showMessageDialog(this, "Invalid Room ID — Room Not Found!");
+        return;
+    }
+
+    if(gc.getguest(guestId) == null){
+        JOptionPane.showMessageDialog(this, "Invalid Guest ID — Guest Not Found!");
+        return;
+    }
+
+    boolean result = bc.createbooking(roomId, guestId, checkinDate, checkoutDate);
+
+    if(result) JOptionPane.showMessageDialog(this,"Booking Created Successfully!");
+    else JOptionPane.showMessageDialog(this,"Booking Failed!");
+
+} catch(Exception e){
+    JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+}finally{
+           
+           txt_roomid.setText("");
+           txt_guestid.setText("");
+           date_checkin.setDate(null);
+           date_checkout.setDate(null);
+   loader();
+       }
+
+        
+        
+        
+    }//GEN-LAST:event_btn_createbookingActionPerformed
+
+    private void btn_guestUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_guestUpdateActionPerformed
+        int row = tbl_guest.getSelectedRow();
+
+    if(row == -1){
+        JOptionPane.showMessageDialog(this, "Select a guest first!");
+        return;
+    }
+
+    int id = Integer.parseInt(tbl_guest.getValueAt(row,0).toString()); 
+
+    String name = txt_guestname.getText();
+    String email = txt_guestemail.getText();
+    String phone = txt_guestphonenum.getText();
+    String nic = txt_guestnic.getText();
+    String address = txt_guestaddress.getText();
+
+    GuestController gc = new GuestController();
+    boolean result = gc.updateguest(id,name,phone,email,nic,address);
+
+    if(result){
+        JOptionPane.showMessageDialog(this,"Guest Updated Successfully!");
+        loadGuestTable();
+        clearGuestFields();
+    }else{
+        JOptionPane.showMessageDialog(this,"Guest Update Failed!");
+    }
+    }//GEN-LAST:event_btn_guestUpdateActionPerformed
+
+    private void btn_guestSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_guestSaveActionPerformed
+        if (txt_guestname.getText().isEmpty() ||
+        txt_guestemail.getText().isEmpty() ||
+        txt_guestphonenum.getText().isEmpty() ||
+        txt_guestnic.getText().isEmpty() ||
+        txt_guestaddress.getText().isEmpty()) {
+
+        JOptionPane.showMessageDialog(this, "Please fill all fields!");
+        return;
+    }
+
+    String name = txt_guestname.getText();
+    String email = txt_guestemail.getText();
+    String phone = txt_guestphonenum.getText();
+    String nic = txt_guestnic.getText();
+    String address = txt_guestaddress.getText();
+
+    GuestController gc = new GuestController();
+    boolean result = gc.addguest(name, phone, email, nic, address);
+
+    if(result){
+        JOptionPane.showMessageDialog(this,"Guest Saved Successfully!");
+        loadGuestTable();   
+        clearGuestFields();
+        loader();
+    } else {
+        JOptionPane.showMessageDialog(this,"Failed to Save Guest!");
+    }
+        
+    }//GEN-LAST:event_btn_guestSaveActionPerformed
+    
+    
+//    private void loadGuestTable(){
+//
+//    GuestController gc = new GuestController();
+//    List<Guest> list = gc.getallguest();  
+//
+//    DefaultTableModel model = new DefaultTableModel(
+//        new String[]{"ID", "Name", "Phone", "Email", "NIC", "Address"}, 0
+//    );
+//
+//    for (Guest g : list) {
+//        model.addRow(new Object[]{
+//            g.getID(),
+//            g.getName(),
+//            g.getPhone(),
+//            g.getEmail(),
+//            g.getNICORPassport(),
+//            g.getAddress()
+//        });
+//    }
+//
+//    tbl_guest.setModel(model);
+//}
+    
+    private void clearGuestFields(){
+    txt_guestname.setText("");
+    txt_guestemail.setText("");
+    txt_guestphonenum.setText("");
+    txt_guestnic.setText("");
+    txt_guestaddress.setText("");
+}
+
+    private void txt_SearchguestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_SearchguestActionPerformed
+        
+        
+    }//GEN-LAST:event_txt_SearchguestActionPerformed
+
+    private void btn_guestDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_guestDeleteActionPerformed
+        int row = tbl_guest.getSelectedRow();
+        if(row == -1){
+            JOptionPane.showMessageDialog(this, "Select a guest first!");
+            return;
+        }
+
+        int id = Integer.parseInt(tbl_guest.getValueAt(row,0).toString());
+
+        int confirm = JOptionPane.showConfirmDialog(this,
+            "Are you sure want to delete this guest?",
+            "Confirm Delete", JOptionPane.YES_NO_OPTION);
+
+        if(confirm == JOptionPane.YES_OPTION){
+
+            GuestController gc = new GuestController();
+            boolean result = gc.deleteguest(id);
+
+            if(result){
+                JOptionPane.showMessageDialog(this,"Guest Deleted Successfully!");
+                loadGuestTable();
+                clearGuestFields();
+            } else {
+                JOptionPane.showMessageDialog(this,"Delete Failed!");
+            }
+    }//GEN-LAST:event_btn_guestDeleteActionPerformed
+    }
+    private void txt_SearchguestKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_SearchguestKeyReleased
+         
+        DefaultTableModel ob = (DefaultTableModel) tbl_guest.getModel();
+        TableRowSorter<DefaultTableModel>  obj = new TableRowSorter<>(ob);
+        tbl_guest.setRowSorter(obj);
+        obj.setRowFilter(RowFilter.regexFilter(txt_Searchguest.getText()));
+        
+     
+    }//GEN-LAST:event_txt_SearchguestKeyReleased
+
+    private void tbl_guestMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_guestMouseClicked
+        DefaultTableModel model = (DefaultTableModel)tbl_guest.getModel();
+        
+        int index = tbl_guest.getSelectedRow();
+        
+        txt_guestname.setText(model.getValueAt(index, 1).toString());
+        txt_guestphonenum.setText(model.getValueAt(index, 2).toString());
+        txt_guestemail.setText(model.getValueAt(index, 3).toString());
+        txt_guestnic.setText(model.getValueAt(index, 4).toString());
+        txt_guestaddress.setText(model.getValueAt(index, 5).toString());
+        txt_Searchguest.setText(model.getValueAt(index, 0).toString());
+        
+    }//GEN-LAST:event_tbl_guestMouseClicked
+
+    private void txt_pay_bookingIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_pay_bookingIDActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_pay_bookingIDActionPerformed
+
+    private void txt_pay_bookingIDKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_pay_bookingIDKeyReleased
+        
+    }//GEN-LAST:event_txt_pay_bookingIDKeyReleased
+
+    private void btn_check_bookingIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_check_bookingIDActionPerformed
+        loadBooking();
+    }//GEN-LAST:event_btn_check_bookingIDActionPerformed
+
+    private void btn_check_bookingID1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_check_bookingID1ActionPerformed
+       processPayment();
+    }//GEN-LAST:event_btn_check_bookingID1ActionPerformed
+
+    private void btn_generatepdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_generatepdfActionPerformed
+        generateFullReportPdf();
+    }//GEN-LAST:event_btn_generatepdfActionPerformed
+
+    
+
+    
+    
+  private void loadBooking_rooms(){
         
         
         
         RoomController rc = new RoomController();
     List<Room> dataList = rc.getallrooms();
     
-    String[] columnNames = {"ID", "Number", "Type", "Price", "Status"};
+    String[] columnNames = {"ID", "Number", "Type", "Price"};
     DefaultTableModel model = new DefaultTableModel(columnNames, 0);
 
     for (Room obj : dataList) {
@@ -936,13 +2176,13 @@ public class Dashboard extends javax.swing.JFrame {
             obj.getNumber(),
             obj.getType(),
             obj.getPrice(),
-            obj.getStatus()
+            
                 
        
         } );
     }
 
-    tbl_rooms.setModel(model);
+    tbl_booking_rooms.setModel(model);
     usageOfRooms();
     }
     
@@ -958,7 +2198,7 @@ public class Dashboard extends javax.swing.JFrame {
         int count = entry.getValue();
 
         
-        pieChart1.addData(new ModelPieChart(roomType, count, getcolor(index++)));
+       pieChart1.addData(new ModelPieChart(roomType, count, getcolor(index++)));
     }
 }
 
@@ -1006,24 +2246,61 @@ private Color getcolor(int index){
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btn_bookings;
+    public static javax.swing.JButton btn_bookings;
+    private javax.swing.JButton btn_check_bookingID;
+    private javax.swing.JButton btn_check_bookingID1;
+    private javax.swing.JButton btn_createbooking;
     private javax.swing.JButton btn_delete;
-    private javax.swing.JButton btn_guests;
-    private javax.swing.JButton btn_payment;
-    private javax.swing.JButton btn_rooms;
-    private javax.swing.JButton btn_rooms1;
+    private javax.swing.JButton btn_generatepdf;
+    private javax.swing.JButton btn_guestDelete;
+    private javax.swing.JButton btn_guestSave;
+    private javax.swing.JButton btn_guestUpdate;
+    public static javax.swing.JButton btn_guests;
+    public static javax.swing.JButton btn_payment;
+    public static javax.swing.JButton btn_rooms;
+    public static javax.swing.JButton btn_rooms1;
     private javax.swing.JButton btn_save;
-    private javax.swing.JButton btn_setting;
+    public static javax.swing.JButton btn_setting;
     private javax.swing.JButton btn_update;
     private javax.swing.JComboBox<String> cmb_status;
+    private com.toedter.calendar.JDateChooser date_checkin;
+    private com.toedter.calendar.JDateChooser date_checkout;
+    private com.toedter.calendar.JDateChooser date_end;
+    private com.toedter.calendar.JDateChooser date_start;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel32;
+    private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel34;
+    private javax.swing.JLabel jLabel35;
+    private javax.swing.JLabel jLabel36;
+    private javax.swing.JLabel jLabel37;
+    private javax.swing.JLabel jLabel38;
+    private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -1037,21 +2314,51 @@ private Color getcolor(int index){
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
+    public static javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JPanel l_report_Income;
     private javax.swing.JPanel l_report_Iroom_avalability;
+    private javax.swing.JLabel lblBalance;
+    private javax.swing.JLabel lbl_checkout;
+    private javax.swing.JLabel lbl_isAvalable;
     private javax.swing.JLabel lbl_refresh;
-    private javax.swing.JTabbedPane menu;
+    private javax.swing.JLabel lbl_repertData;
+    private javax.swing.JLabel lbl_totl_income;
+    public static javax.swing.JTabbedPane menu;
     private javax.swing.JPanel p_report;
     private chart.PieChart pieChart1;
+    private javax.swing.JPanel pl_guest;
+    private javax.swing.JPanel pl_income;
+    private javax.swing.JPanel pla_tot_balance;
+    private javax.swing.JTable tbl_booking_rooms;
+    private javax.swing.JTable tbl_guest;
     private javax.swing.JTable tbl_rooms;
+    private javax.swing.JTextField txtDiscount;
+    private javax.swing.JTextField txtFinal;
+    private javax.swing.JTextField txtPaidAmount;
+    private javax.swing.JTextField txtTax;
+    private javax.swing.JTextField txt_Searchguest;
+    private javax.swing.JTextField txt_guestaddress;
+    private javax.swing.JTextField txt_guestemail;
+    private javax.swing.JTextField txt_guestid;
+    private javax.swing.JTextField txt_guestname;
+    private javax.swing.JTextField txt_guestnic;
+    private javax.swing.JTextField txt_guestphonenum;
     private javax.swing.JTextField txt_number;
+    private javax.swing.JTextField txt_pay_bookingID;
+    private javax.swing.JTextField txt_pay_checkin;
+    private javax.swing.JTextField txt_pay_checkout;
+    private javax.swing.JTextField txt_pay_guestID;
+    private javax.swing.JTextField txt_pay_roomID;
+    private javax.swing.JTextField txt_pay_tot;
     private javax.swing.JTextField txt_price;
+    private javax.swing.JTextField txt_roomid;
     private javax.swing.JTextField txt_search;
     private javax.swing.JTextField txt_type;
     // End of variables declaration//GEN-END:variables

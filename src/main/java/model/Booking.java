@@ -37,11 +37,11 @@ public class Booking {
     }
     
     public void checkIn(){
-        status = "CheckedIn";
+        status = "Checked-In";
     }
     
     public void CheckedOut(){
-        status = "CheckedOut";
+        status = "Checked-Out";
     }
     
     public int getID(){

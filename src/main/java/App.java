@@ -18,11 +18,11 @@ public class App {
         
         
         
-//        HashPassword("admin");
+//       HashPassword("staff123");
         
     }
     
-//    
+    
 // public static String HashPassword(String password){
 //    
 //     try {

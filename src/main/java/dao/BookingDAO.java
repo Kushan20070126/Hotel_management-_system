@@ -29,7 +29,7 @@ public class BookingDAO implements IBookingDAO {
         
         try{
             
-            PreparedStatement st = con.prepareStatement("INSERT INTO bookings(guest_id, room_id, check_in, check_out, status, total_amount) VALUES (?, ?, ?, ?, ?, ?)") ;
+            PreparedStatement st = con.prepareStatement("INSERT INTO bookings(room_id, guest_id, check_in, check_out, status, total_amount) VALUES (?, ?, ?, ?, ?, ?)") ;
             
             st.setInt(1, booking.getGuestID());
             st.setInt(2, booking.getRoomID());

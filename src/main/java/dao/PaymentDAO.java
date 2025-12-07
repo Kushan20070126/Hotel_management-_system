@@ -201,20 +201,19 @@ public class PaymentDAO implements IPaymentDAO {
     }
     
      @Override
-    public double GET_TOTAL_INCOME(Date start, Date end) {
-    String sql = "SELECT SUM(amount) AS total FROM payments WHERE date BETWEEN ? AND ?";
+    public double GET_TOTAL_INCOME() {
+     String sql = "SELECT SUM(total_amount) AS income FROM bookings";
+    
     try {
         PreparedStatement ps = con.prepareStatement(sql);
-        ps.setDate(1, start);
-        ps.setDate(2, end);
         ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            return rs.getDouble("total");
-        }
-    } catch (Exception e) {
+        
+        if(rs.next()) return rs.getDouble("income");
+        
+    } catch(Exception e) {
         System.out.println("Income Report Error: " + e);
     }
-    return 0.0;
-}
+    return 0;
 
+    }
 }
