@@ -6,44 +6,52 @@ A comprehensive hotel management system designed to streamline hotel operations,
 
 ## Introduction
 
-The Hotel Management System aims to automate common hotel workflows such as room booking, check-in/check-out, billing, and customer management. Developed for educational and commercial use, this project showcases best practices in software architecture, modular design, and database management for the hospitality industry.
+The Hotel Management System automates common hotel workflows such as room booking, check-in/check-out, billing, and customer management. Developed for educational and commercial use, this project showcases best practices in software architecture, modular design, and database management for the hospitality industry.
 
 ---
 
 ## Installation
 
-To set up the Hotel Management System on your local machine, follow these steps:
+To set up the Hotel Management System locally, follow these steps:
 
 1. **Clone the repository:**
+
    ```bash
    git clone https://github.com/Kushan20070126/Hotel_management-_system.git
    ```
+
 2. **Navigate to the project directory:**
+
    ```bash
    cd Hotel_management-_system
    ```
-3. **Install dependencies:**  
-   Install required packages based on the language and package manager (Java Maven).
-   ```bash
-   java : https://www.oracle.com/apac/java/technologies/downloads/
-   Netbeans : https://netbeans.apache.org/front/main/download/
-   ```
-4. **Set up the database:**  
-   Initialize the database using the provided schema or migration scripts.
-   ```bash
-   src/main/java/util/DBConnection.java
 
+3. **Install dependencies:**
+   Ensure Java 21 and Apache NetBeans are installed.
+
+   ```bash
+   # Java download
+   https://www.oracle.com/apac/java/technologies/downloads/
+   # NetBeans download
+   https://netbeans.apache.org/front/main/download/
+   ```
+
+4. **Set up the database:**
+   Configure MySQL or SQLite database using `DBConnection.java`.
+
+   ```java
    jdbc:mysql://localhost:3306/hotel_db?useSSL=false
    user = root
    pass = ""
-   
    ```
-5. **Configure environment variables:**  
+
+5. **Configure environment variables:**
    Update configuration files with your database credentials and environment-specific settings.
 
 6. **Run the application:**
+
    ```bash
-     mvn clean install
+   mvn clean install
    mvn exec:java -Dexec.mainClass="view.Login"
    ```
 
@@ -51,39 +59,36 @@ To set up the Hotel Management System on your local machine, follow these steps:
 
 ## Features
 
-- Room booking and availability management
-- Guest registration and profile management
-- Check-in and check-out process automation
-- Billing and invoicing
-- Room status tracking (vacant, occupied, cleaning, etc.)
-- Staff and user role management
-- Dashboard and reporting
-- Secure authentication and authorization
-- Database backup and restore
+* Room booking and availability management
+* Guest registration and profile management
+* Check-in and check-out automation
+* Billing and invoicing
+* Room status tracking (vacant, occupied, cleaning, etc.)
+* Staff and user role management
+* Dashboard and reporting
+* Secure authentication and authorization
+* Database backup and restore
 
 ---
 
 ## Requirements
 
-The system requires the following:
-
-- java 21 
-- SQLite, MySQL, or PostgreSQL for data persistence
-- Apache NetBeans
-- Optional: Docker for containerized deployment
-
+* Java 21
+* MySQL, SQLite, or PostgreSQL for database
+* Apache NetBeans IDE
+* Optional: Docker for containerized deployment
 
 ---
 
 ## Usage
 
-After installation and configuration, launch the system and access the dashboard via your web browser:
+After installation, launch the system and access the dashboard via the application.
 
-- **Login:** Enter your credentials on the login page.
-- **Book a Room:** Navigate to the booking section, select room type, and assign to a guest.
-- **Check-in/Check-out:** Use the appropriate modules to manage guest stays.
-- **Billing:** Generate invoices for guests and process payments.
-- **Admin Panel:** Manage rooms, staff, and system settings.
+* **Login:** Enter credentials on the login page.
+* **Book a Room:** Navigate to booking, select room type, assign to a guest.
+* **Check-in/Check-out:** Manage guest stays.
+* **Billing:** Generate invoices and process payments.
+* **Admin Panel:** Manage rooms, staff, and system settings.
 
 ### Example Usage Flow
 
@@ -103,22 +108,20 @@ flowchart TD
 
 ## Contributing
 
-We welcome contributions from the community!
+We welcome contributions:
 
-- Fork the repository
-- Create a new branch for your feature or bugfix
-- Commit your changes with clear messages
-- Submit a pull request describing your modifications
+* Fork the repository
+* Create a new branch
+* Commit changes with clear messages
+* Submit a pull request
 
-Please follow the code style guidelines and ensure all tests pass before submitting.
+Follow code style guidelines and ensure tests pass.
 
 ---
 
 ## License
 
 This project is licensed under the MIT License.
-
----
 
 ```card
 {
@@ -129,4 +132,4 @@ This project is licensed under the MIT License.
 
 ---
 
-Thank you for your interest in the Hotel Management System. For questions or support, please open an issue or contact the maintainers via GitHub.
+Thank you for your interest. For questions or support, open an issue or contact maintainers via GitHub.
