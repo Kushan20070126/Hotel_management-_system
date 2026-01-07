@@ -14,11 +14,14 @@ public class App {
 
         Login login = new Login();
         login.show();
+
+
+
+
         
         
         
-        
-//       HashPassword("staff123");
+//       HashPassword("admin");
         
     }
     
