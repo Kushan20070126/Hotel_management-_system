@@ -51,10 +51,41 @@ To set up the Hotel Management System locally, follow these steps:
 6. **Run the application:**
 
    ```bash
+   App.java ->
    mvn clean install
-   mvn exec:java -Dexec.mainClass="view.Login"
+   mvn exec:java -Dexec.mainClass="App"
    ```
+Connects to MySQL without a database.
+Checks if hoteldb exists; if not, creates it and tabels are same.
+Connects to the new database
+7. **Password is SHA-256 hash:**
 
+   ```bash
+   INSERT INTO users(username, password, role) 
+                VALUES ('admin', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 'Admin');
+// public static String HashPassword(String password){
+//    
+//     try {
+//         
+//         MessageDigest mg = MessageDigest.getInstance("SHA-256");
+//         byte[] diget = mg.digest(password.getBytes());
+//         BigInteger intg = new BigInteger(1,diget);
+//         
+//         System.out.println("password : " + intg.toString(16));
+//         return intg.toString(16);
+//         
+//     } catch (Exception e) {
+//         
+//         System.out.println("Password hashing error: " + e.getMessage());
+//            return null;
+//     }
+//    
+// }
+
+//       HashPassword("admin"); -> call it pass word
+
+
+   ```
 ---
 
 ## Features
