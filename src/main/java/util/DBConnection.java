@@ -130,6 +130,23 @@ public class DBConnection {
                 FOREIGN KEY (booking_id) REFERENCES bookings(id)
             )
         """);
+        
+                String checkAdmin = "SELECT COUNT(*) FROM users WHERE username='admin'";
+        var rs = st.executeQuery(checkAdmin);
+        rs.next();
+        int count = rs.getInt(1);
+
+        if (count == 0) {
+           
+            String insertAdmin = """
+                INSERT INTO users(username, password, role) 
+                VALUES ('admin', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 'Admin')
+            """;
+            st.executeUpdate(insertAdmin);
+            System.out.println("Default admin user created!");
+        } else {
+            System.out.println("Admin user already exists.");
+        }
         System.out.println("All tables created or verified successfully!");
         tmpCon.close();
              } catch (Exception e) {
